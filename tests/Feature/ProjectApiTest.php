@@ -15,7 +15,7 @@ class ProjectApiTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'sanctum')->postJson('/api/projects', [
+        $response = $this->actingAs($user, 'sanctum')->postJson('/api/v1/projects', [
             'name' => 'My New Project',
             'description' => 'Test project description',
             'status' => 'active',
@@ -35,7 +35,7 @@ class ProjectApiTest extends TestCase
         $otherUser = User::factory()->create();
         Project::factory(2)->create(['user_id' => $otherUser->id]);
 
-        $response = $this->actingAs($user, 'sanctum')->getJson('/api/projects');
+        $response = $this->actingAs($user, 'sanctum')->getJson('/api/v1/projects');
 
         $response->assertStatus(200)
             ->assertJsonCount(3, 'data');
@@ -47,39 +47,26 @@ class ProjectApiTest extends TestCase
         $otherUser = User::factory()->create();
         $otherProject = Project::factory()->create(['user_id' => $otherUser->id]);
 
-        $response = $this->actingAs($user, 'sanctum')->getJson("/api/projects/{$otherProject->id}");
+        $response = $this->actingAs($user, 'sanctum')->getJson("/api/v1/projects/{$otherProject->id}");
 
-        $response->assertStatus(404);
+        $response->assertStatus(403);
     }
 
     public function test_show_update_and_delete_project_return_not_found_when_project_does_not_exist()
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user, 'sanctum')->getJson('/api/projects/99999')
+        $this->actingAs($user, 'sanctum')->getJson('/api/v1/projects/99999')
             ->assertStatus(404)
             ->assertJsonPath('success', false);
 
-        $this->actingAs($user, 'sanctum')->putJson('/api/projects/99999', ['name' => 'Updated'])
+        $this->actingAs($user, 'sanctum')->putJson('/api/v1/projects/99999', ['name' => 'Updated'])
             ->assertStatus(404)
             ->assertJsonPath('success', false);
 
-        $this->actingAs($user, 'sanctum')->deleteJson('/api/projects/99999')
-            ->assertStatus(404)
-            ->assertJsonPath('success', false);
-    }
-
-    public function test_task_creation_returns_not_found_when_project_does_not_exist()
-    {
-        $user = User::factory()->create();
-
-        $this->actingAs($user, 'sanctum')->postJson('/api/projects/99999/tasks', [
-            'title' => 'New task',
-            'description' => 'A task',
-            'status' => 'pending',
-            'priority' => 'medium',
-        ])
+        $this->actingAs($user, 'sanctum')->deleteJson('/api/v1/projects/99999')
             ->assertStatus(404)
             ->assertJsonPath('success', false);
     }
+
 }

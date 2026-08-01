@@ -15,6 +15,7 @@ class TaskRepository
     public function getPaginated(int $projectId, array $filters = [], int $perPage = 10): LengthAwarePaginator
     {
         return Task::query()
+            ->with(['project','project.user'])
             ->where('project_id', $projectId)
             ->when($filters['status'] ?? null, fn($q, $status) => $q->where('status', $status))
             ->when($filters['priority'] ?? null, fn($q, $priority) => $q->where('priority', $priority))

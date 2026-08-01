@@ -14,7 +14,7 @@ class ProjectRepository
 
     public function getPaginatedForUser(int $userId, int $perPage = 10): LengthAwarePaginator
     {
-        return Project::where('user_id', $userId)->latest()->paginate($perPage);
+        return Project::with('user')->where('user_id', $userId)->latest()->paginate($perPage);
     }
 
     public function findById(int $id): ?Project

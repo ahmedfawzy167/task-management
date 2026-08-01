@@ -211,6 +211,7 @@ class TaskController extends Controller
         }
 
         $task = $this->taskService->createTask($projectId, $request->validated());
+        $task->load('project', 'project.user');
 
         return $this->created(new TaskResource($task), 'api.task_created_successfully');
     }
@@ -258,6 +259,7 @@ class TaskController extends Controller
         }
 
         $task = $this->taskService->updateTask($task, $request->validated());
+        $task->load('project', 'project.user');
 
         return $this->success(new TaskResource($task), 'api.task_updated_successfully');
     }

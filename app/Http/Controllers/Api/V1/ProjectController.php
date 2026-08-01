@@ -37,6 +37,7 @@ class ProjectController extends Controller
     {
         $projects = $this->projectService->getUserProjects($request->user()->id, $request->get('limit', 10));
 
+
         return $this->success(ProjectResource::collection($projects)->response()->getData(true), 'api.projects_retrieved_successfully');
     }
 
@@ -65,7 +66,7 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request)
     {
         $project = $this->projectService->createProject($request->user()->id, $request->validated());
-
+        $project->load('user');
         return $this->created(new ProjectResource($project), 'api.project_created_successfully');
     }
 
@@ -108,7 +109,7 @@ class ProjectController extends Controller
         }
 
         $project = $this->projectService->getUserProject($request->user()->id, $id);
-
+        $project->load('user');
         return $this->success(new ProjectResource($project), 'api.project_viewed_successfully');
     }
 
@@ -148,6 +149,7 @@ class ProjectController extends Controller
         $project = $this->projectService->getUserProject($request->user()->id, $id);
 
         $project = $this->projectService->updateProject($project, $request->validated());
+        $project->load('user');
 
         return $this->success(new ProjectResource($project), 'api.project_updated_successfully');
     }
