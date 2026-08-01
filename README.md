@@ -55,12 +55,17 @@ php artisan schedule:work
 
 ## API Documentation
 
-The API Documentation is fully automated via Open API 3 / Swagger interface using `dedoc/scramble`.
+The API documentation is generated using **Swagger L5**.
 
-To view the interactive API Documentation interface:
-1. Start your Server: `php artisan serve`
-2. Open your browser and navigate to: `http://localhost:8000/docs/api`
-3. To get the raw OpenAPI JSON mapping, visit: `http://localhost:8000/docs/api.json`
+To view the interactive API documentation:
+
+1. Start the development server:
+   ```bash
+   php artisan serve
+   ```
+2. Open your browser and navigate to:
+   ```
+   http://127.0.0.1:8000/api/documentation   ```
 
 ## Testing
 
@@ -72,8 +77,6 @@ php artisan test
 
 ## Postman Collection
 
-The API routes can be automatically exported to a Postman Collection using the following artisan command:
-```bash
-php artisan export:postman
-```
-This will scan your routes and generate a `.json` file that you can directly import into Postman! (By default, it drops it into `storage/app/postman/` or you can use the generated `task_management.postman_collection.json` in the root).
+A complete Postman API documentation is also available online:
+
+https://documenter.getpostman.com/view/27912305/2sBY4TpxXH
